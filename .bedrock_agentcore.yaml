@@ -1,0 +1,30 @@
+default_agent: elgato_mcp
+agents:
+  elgato_mcp:
+    name: elgato_mcp
+    entrypoint: /home/cam/code/elgato-hdmi-camera-check/elgato_mcp.py
+    platform: linux/amd64
+    container_runtime: docker
+    aws:
+      execution_role: arn:aws:iam::135112444960:role/AmazonBedrockAgentCoreSDKRuntime-ap-southeast-2-86db2f38a2
+      execution_role_auto_create: false
+      account: '135112444960'
+      region: ap-southeast-2
+      ecr_repository: 135112444960.dkr.ecr.ap-southeast-2.amazonaws.com/bedrock-agentcore-elgato_mcp
+      ecr_auto_create: false
+      network_configuration:
+        network_mode: PUBLIC
+      protocol_configuration:
+        server_protocol: HTTP
+      observability:
+        enabled: true
+    bedrock_agentcore:
+      agent_id: elgato_mcp-StNN8e82jV
+      agent_arn: arn:aws:bedrock-agentcore:ap-southeast-2:135112444960:runtime/elgato_mcp-StNN8e82jV
+      agent_session_id: eaed5e37-26d5-4f34-b8ad-5fe68ba2643a
+    codebuild:
+      project_name: bedrock-agentcore-elgato_mcp-builder
+      execution_role: arn:aws:iam::135112444960:role/AmazonBedrockAgentCoreSDKCodeBuild-ap-southeast-2-86db2f38a2
+      source_bucket: bedrock-agentcore-codebuild-sources-135112444960-ap-southeast-2
+    authorizer_configuration: null
+    oauth_configuration: null
