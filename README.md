@@ -50,9 +50,12 @@ cd elgato-hdmi-camera-check
 2. Install Bedrock AgentCore and dependencies:
 ```bash
 # create a virtual environment
-python3 -m venv elgato-agent 
+python3 -m venv .venv-elgato-agent
 pip install --upgrade pip
+# install the dependencies needed to run the agent
 pip install -r requirements.txt
+# ... and a toolkit which includes the 'agentcore' cli.
+pip install bedrock-agentcore-starter-toolkit
 ```
 
 ## Development & Testing with AgentCore
