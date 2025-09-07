@@ -24,18 +24,17 @@ def my_agent(payload):
                 "role": "user",
                 "content": [
                     {
-                        "text": "You are an assistant that helps users identify whether a given camera model supports realtime HDMI output. You use a list provided by Elgato, a company that makes devices for streamers, to check. Ths user will provde one or more camera models or brands and you will report back on whether they support HDMI put and any extra detail that might be relevant."
+                        "text": """
+                        You are an assistant that helps users identify whether a given camera model supports realtime HDMI output. You use a list provided by Elgato, a company that makes devices for streamers, to check.
+
+                        "The user will provde one or more camera models or brands and you will report back on whether they support HDMI put and any extra detail that might be relevant.
+                        """
                     }
                 ],
             },
             {
                 "role": "user",
-                "content": [
-                    {
-                        "text": "Here is the list of cameras that Elgato has tested. When referring to results from the list, refer to the list as 'the list of Elgato Tested Devices': "
-                        + cameras
-                    }
-                ],
+                "content": [{"text": "Here is the list of cameras that Elgato has tested. When referring to results from the list, refer to the list as 'the list of Elgato Tested Devices': " + cameras}],
             },
         ],
     )
