@@ -85,7 +85,7 @@ This will run the agent code locally, but inference will still call out to AWS. 
 # List available tools
 curl -X POST http://localhost:8000/mcp \
   -H "Content-Type: application/json" \
-  -H "Content-Type: text/event-stream" \
+  -H "Accept: application/json, text/event-stream" \
   -d '{
   "jsonrpc": "2.0",
   "id": 1,
