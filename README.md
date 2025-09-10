@@ -73,9 +73,11 @@ deactivate
 1. **Start the agent locally**:
 
 ```bash
-source elgato-agent/bin/activate
+source .venv-elgato-agent/bin/activate
 python elgato_mcp.py
 ```
+
+This will run the agent code locally, but inference will still call out to AWS. So, you need AWS credentials in your env vars for it work.
 
 2. **Test with curl**:
 
