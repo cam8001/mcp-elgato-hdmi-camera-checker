@@ -1,40 +1,14 @@
 # Elgato HDMI Camera Check
 
-An AI-powered assistant built with **Amazon Bedrock AgentCore** that helps users identify whether camera models support real-time HDMI output using Elgato's tested device database.
+An AI-powered assistant built with **Amazon Bedrock AgentCore** that helps users identify whether camera models support real-time HDMI output using [Elgato's tested device database](https://www.elgato.com/us/en/s/cam-link-camera-check).
 
 ## Overview
 
-This project is built using the **Amazon Bedrock AgentCore framework**, which provides a streamlined way to develop, test, and deploy AI agents. The agent answers questions about camera HDMI compatibility based on Elgato's comprehensive list of tested devices.
-
-## Built with Bedrock AgentCore
-
-This project leverages the **Amazon Bedrock AgentCore Starter Toolkit** for:
-
-- **Local Development & Testing**: Run and test the agent locally before deployment
-- **Automated Build Process**: Containerization and deployment handled by the toolkit
-- **AWS Integration**: Seamless deployment to AgentCore Runtime with automatic IAM role creation
-- **Observability**: Built-in CloudWatch integration for monitoring and debugging
-
-### AgentCore Architecture
-
-The application follows the Bedrock AgentCore pattern:
-
-- Uses `BedrockAgentCoreApp()` as the main application framework
-- Implements the `@app.entrypoint` decorator for the main agent function
-- Integrates with Strands Agents for AI model interaction
-- Follows containerized deployment standards
-
-## Features
-
-- Query camera HDMI compatibility from Elgato's tested device database
-- Get detailed information about connection types, power requirements, and setup guides
-- Powered by Amazon Bedrock Nova Lite model
-- Built-in observability and monitoring via AgentCore
-- Production-ready containerized deployment
+This agent answers questions about camera HDMI compatibility based on Elgato's comprehensive list of tested devices. This project is built using the **Amazon Bedrock AgentCore framework**. 
 
 ## Prerequisites
 
-- **AWS Account** with credentials configured
+- **AWS Account** with credentials configured (with rights for agentcore)
 - **Python 3.10+** installed
 - **Boto3** installed
 - **AWS Permissions**: AgentCore deployment permissions (see [AgentCore permissions](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-permissions.html))
@@ -112,9 +86,20 @@ curl -X POST http://localhost:8000/mcp \
 }'
 ```
 
+Or, you can integrate it as an MCP for Q CLI or Claude Desktop:
+
+```json
+"mcpServers": {
+    "elgato-mcp": {
+      "command": "npx",
+      "args": ["mcp-remote", "http://localhost:8000/mcp"]
+    }
+  },
+```
+
 ### AgentCore Toolkit Commands
 
-The project includes a `.bedrock_agentcore.yaml` configuration file for the AgentCore toolkit.
+The project includes a `.bedrock_agentcore.yaml` configuration file for the AgentCore toolkit. This is particular to my account setup, so you might need to do the below.
 
 **Configure the agent** (if needed):
 
@@ -128,36 +113,11 @@ agentcore configure -e elgato_mcp.py
 agentcore launch
 ```
 
-**Test deployed agent**:
-
-```bash
-agentcore invoke '{"prompt": "What cameras from Canon work with HDMI streaming?"}'
-```
-
 **View logs and monitoring**:
 The toolkit automatically sets up CloudWatch logging. Check the output from `agentcore launch` for log locations.
 
 ## Deployment Options
 
-### Option 1: AgentCore Toolkit (Recommended)
-
-Uses the Bedrock AgentCore Starter Toolkit for automated deployment:
-
-- Automatic IAM role creation
-- Container image building via CodeBuild
-- ECR repository management
-- AgentCore Runtime provisioning
-
-### Option 2: Manual Docker Deployment
-
-For custom deployment scenarios:
-
-```bash
-docker build -t elgato-hdmi-camera-check .
-docker run -p 8080:8080 -p 8000:8000 elgato-hdmi-camera-check
-```
-
-## Usage Examples
 
 ### Query Examples
 
@@ -205,7 +165,7 @@ print(json.loads(''.join(content)))
 
 ## Camera Database
 
-The `cameras.json` file contains Elgato's comprehensive list of tested cameras with:
+The `cameras.json` file contains [Elgato's comprehensive list of tested cameras](https://www.elgato.com/us/en/s/cam-link-camera-check) with:
 
 - Manufacturer and model information
 - Maximum resolution support
@@ -219,7 +179,7 @@ The `cameras.json` file contains Elgato's comprehensive list of tested cameras w
 
 ### Environment Variables
 
-- `AWS_REGION`: AWS region (default: ap-southeast-2)
+- `AWS_REGION`: AWS region
 - `AWS_DEFAULT_REGION`: Default AWS region
 - `DOCKER_CONTAINER`: Set to 1 when running in Docker
 
@@ -241,7 +201,7 @@ Enable observability by following the [AgentCore observability guide](https://do
 
 - `bedrock-agentcore`: Amazon Bedrock AgentCore SDK for building AI agents
 - `strands-agents`: Agent orchestration library
-- `aws-opentelemetry-distro`: AWS observability instrumentation
+- `aws-opentelemetry-distro`: AWS observability instrumentation (should be installed by `bedrock-agentcore`
 - `bedrock-agentcore-starter-toolkit`: CLI toolkit for deployment (development only)
 
 ## Troubleshooting
@@ -260,6 +220,3 @@ For detailed troubleshooting, see the [AgentCore troubleshooting guide](https://
 - [AgentCore Starter Toolkit](https://github.com/aws/bedrock-agentcore-starter-toolkit)
 - [Strands Agents Documentation](https://strandsagents.com/latest/documentation/docs/)
 
-## License
-
-[Add your license information here]
