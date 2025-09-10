@@ -18,6 +18,7 @@ This project leverages the **Amazon Bedrock AgentCore Starter Toolkit** for:
 ### AgentCore Architecture
 
 The application follows the Bedrock AgentCore pattern:
+
 - Uses `BedrockAgentCoreApp()` as the main application framework
 - Implements the `@app.entrypoint` decorator for the main agent function
 - Integrates with Strands Agents for AI model interaction
@@ -42,12 +43,14 @@ The application follows the Bedrock AgentCore pattern:
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd elgato-hdmi-camera-check
 ```
 
 2. Install Bedrock AgentCore and dependencies:
+
 ```bash
 # create a virtual environment
 python3 -m venv .venv-elgato-agent
@@ -63,16 +66,43 @@ pip install bedrock-agentcore-starter-toolkit
 ### Local Testing
 
 1. **Start the agent locally**:
+
 ```bash
 source elgato-agent/bin/activate
 python elgato_mcp.py
 ```
 
 2. **Test with curl**:
+
 ```bash
-curl -X POST http://localhost:8080/invocations \
+# List available tools
+curl -X POST http://localhost:8000/mcp \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "Does the Sony a6000 support HDMI output?"}'
+  -H "Content-Type: text/event-stream" \
+  -d '{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {}
+}'
+```
+
+```bash
+# Call our camera checker
+curl -X POST http://localhost:8000/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "check_camera",
+    "arguments": {
+      "camera_name": "Canon EOS R5"
+    }
+  }
+}'
 ```
 
 ### AgentCore Toolkit Commands
@@ -80,16 +110,19 @@ curl -X POST http://localhost:8080/invocations \
 The project includes a `.bedrock_agentcore.yaml` configuration file for the AgentCore toolkit.
 
 **Configure the agent** (if needed):
+
 ```bash
 agentcore configure -e elgato_mcp.py
 ```
 
 **Deploy to AgentCore Runtime**:
+
 ```bash
 agentcore launch
 ```
 
 **Test deployed agent**:
+
 ```bash
 agentcore invoke '{"prompt": "What cameras from Canon work with HDMI streaming?"}'
 ```
@@ -100,14 +133,18 @@ The toolkit automatically sets up CloudWatch logging. Check the output from `age
 ## Deployment Options
 
 ### Option 1: AgentCore Toolkit (Recommended)
+
 Uses the Bedrock AgentCore Starter Toolkit for automated deployment:
+
 - Automatic IAM role creation
 - Container image building via CodeBuild
 - ECR repository management
 - AgentCore Runtime provisioning
 
 ### Option 2: Manual Docker Deployment
+
 For custom deployment scenarios:
+
 ```bash
 docker build -t elgato-hdmi-camera-check .
 docker run -p 8080:8080 -p 8000:8000 elgato-hdmi-camera-check
@@ -116,12 +153,14 @@ docker run -p 8080:8080 -p 8000:8000 elgato-hdmi-camera-check
 ## Usage Examples
 
 ### Query Examples
+
 - "Does the Sony a6000 support HDMI output?"
 - "What cameras from Canon work with HDMI streaming?"
 - "Tell me about the HDMI compatibility of the Panasonic GH5"
 - "Which Nikon cameras have clean HDMI output?"
 
 ### SDK Integration
+
 ```python
 import json
 import boto3
@@ -160,6 +199,7 @@ print(json.loads(''.join(content)))
 ## Camera Database
 
 The `cameras.json` file contains Elgato's comprehensive list of tested cameras with:
+
 - Manufacturer and model information
 - Maximum resolution support
 - Clean HDMI output capability
@@ -171,16 +211,19 @@ The `cameras.json` file contains Elgato's comprehensive list of tested cameras w
 ## Configuration
 
 ### Environment Variables
+
 - `AWS_REGION`: AWS region (default: ap-southeast-2)
 - `AWS_DEFAULT_REGION`: Default AWS region
 - `DOCKER_CONTAINER`: Set to 1 when running in Docker
 
 ### AgentCore Configuration
+
 The `.bedrock_agentcore.yaml` file contains AgentCore-specific settings managed by the toolkit.
 
 ## Observability
 
 This project includes built-in observability through Bedrock AgentCore:
+
 - **CloudWatch Logs**: Automatic log aggregation
 - **Transaction Search**: Trace agent interactions
 - **Performance Monitoring**: Built-in metrics collection
@@ -197,6 +240,7 @@ Enable observability by following the [AgentCore observability guide](https://do
 ## Troubleshooting
 
 ### Common Issues
+
 - **Permission denied**: Verify AWS credentials with `aws sts get-caller-identity`
 - **Model access**: Ensure Nova Lite model is enabled in Bedrock console
 - **Docker warnings**: Can be ignored when using CodeBuild deployment
