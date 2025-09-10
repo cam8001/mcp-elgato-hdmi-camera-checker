@@ -6,7 +6,6 @@ from bedrock_agentcore import BedrockAgentCoreApp
 from strands import Agent
 
 from mcp.server.fastmcp import FastMCP
-from starlette.responses import JSONResponse
 
 # Agentcore expects MCP server containers to be available at the path 0.0.0.0:8000/mcp
 # @see https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-mcp.html#runtime-mcp-how-it-works
