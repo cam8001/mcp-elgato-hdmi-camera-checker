@@ -54,11 +54,16 @@ cd elgato-hdmi-camera-check
 ```bash
 # create a virtual environment
 python3 -m venv .venv-elgato-agent
+# activate it
+source .venv-elgato-agent/bin/activate
+# then get pip
 pip install --upgrade pip
 # install the dependencies needed to run the agent
 pip install -r requirements.txt
 # ... and a toolkit which includes the 'agentcore' cli.
 pip install bedrock-agentcore-starter-toolkit
+# when you're done, deactivate your venv
+deactivate
 ```
 
 ## Development & Testing with AgentCore
